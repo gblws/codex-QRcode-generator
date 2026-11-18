@@ -5,15 +5,16 @@
   "description": "A compact QR code and barcode generator for Codex plugin workflows.",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite preview --host 127.0.0.1",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node test/dev-server.test.cjs"
   },
   "dependencies": {
     "jsbarcode": "^3.11.6",
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
-    "vite": "^4.5.5"
+    "vite": "4.3.9"
   }
 }
