@@ -1,7 +1,0 @@
-{
-  "name": "code-stamp",
-  "displayName": "Code Stamp",
-  "description": "Generate downloadable QR codes and barcodes from text.",
-  "entry": "dist/index.html",
-  "version": "1.0.0"
-}

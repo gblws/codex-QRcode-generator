@@ -1,0 +1,38 @@
+{
+  "name": "code-stamp",
+  "version": "1.0.1",
+  "description": "Generate QR codes and Code 128 barcodes from text with optional center icons.",
+  "author": {
+    "name": "gblws"
+  },
+  "homepage": "https://github.com/gblws/codex-QRcode-generator",
+  "repository": "https://github.com/gblws/codex-QRcode-generator",
+  "license": "MIT",
+  "keywords": [
+    "qr-code",
+    "barcode",
+    "generator",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Code Stamp",
+    "shortDescription": "Generate QR codes and barcodes",
+    "longDescription": "Generate a QR code or Code 128 barcode from text, customize its colors, add an optional center icon, preview it, and download a PNG.",
+    "developerName": "gblws",
+    "category": "Developer Tools",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/gblws/codex-QRcode-generator",
+    "defaultPrompt": [
+      "Open the Code Stamp QR and barcode generator.",
+      "Generate a QR code from this text.",
+      "Generate a Code 128 barcode from this text."
+    ],
+    "brandColor": "#17191C",
+    "screenshots": []
+  }
+}
