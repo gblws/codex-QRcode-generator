@@ -1,0 +1,20 @@
+{
+  "name": "code-stamp-marketplace",
+  "interface": {
+    "displayName": "Code Stamp"
+  },
+  "plugins": [
+    {
+      "name": "code-stamp",
+      "source": {
+        "source": "local",
+        "path": "."
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
