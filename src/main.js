@@ -18,7 +18,6 @@ app.innerHTML = `
     <header class="topbar">
       <div class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></div>
       <div class="brand-name">Code Stamp</div>
-      <div class="topbar-meta">CODEX TOOL</div>
     </header>
 
     <section class="workspace">
@@ -30,7 +29,6 @@ app.innerHTML = `
 
         <label class="field-label" for="content">内容</label>
         <textarea id="content" rows="5" spellcheck="false">${state.value}</textarea>
-        <div class="field-note"><span id="char-count">18</span> 字符</div>
 
         <div class="control-row">
           <div class="control-block">
@@ -48,7 +46,10 @@ app.innerHTML = `
             <div class="field-label">中心图标</div>
             <div class="icon-name" id="icon-name">未选择</div>
           </div>
-          <label class="upload-button" for="icon-input">选择图标</label>
+          <div class="icon-actions">
+            <button class="icon-clear-button" id="clear-icon" type="button" aria-label="取消中心图标" title="取消中心图标" disabled>×</button>
+            <label class="upload-button" for="icon-input">选择图标</label>
+          </div>
           <input id="icon-input" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden />
         </div>
 
@@ -59,16 +60,10 @@ app.innerHTML = `
       </div>
 
       <div class="preview-panel">
-        <div class="preview-head">
-          <span>预览</span>
-          <span class="preview-status" id="preview-status">已更新</span>
-        </div>
         <div class="preview-stage" id="preview-stage">
           <canvas id="qr-canvas" width="720" height="720"></canvas>
           <svg id="barcode-svg" xmlns="http://www.w3.org/2000/svg" aria-label="条形码"></svg>
-          <div class="empty-preview" id="empty-preview">输入内容开始生成</div>
         </div>
-        <div class="preview-footer"><span id="format-label">QR CODE</span><span id="size-label">720 × 720 px</span></div>
       </div>
     </section>
   </div>
@@ -77,10 +72,7 @@ app.innerHTML = `
 const content = document.querySelector('#content')
 const qrCanvas = document.querySelector('#qr-canvas')
 const barcodeSvg = document.querySelector('#barcode-svg')
-const previewStage = document.querySelector('#preview-stage')
-const status = document.querySelector('#preview-status')
-const count = document.querySelector('#char-count')
-const empty = document.querySelector('#empty-preview')
+const clearIcon = document.querySelector('#clear-icon')
 
 function updateColorLabel(id, value) {
   document.querySelector(`#${id}-value`).textContent = value.toUpperCase()
@@ -102,7 +94,6 @@ function drawIcon(canvas) {
 async function renderQr() {
   qrCanvas.hidden = false
   barcodeSvg.hidden = true
-  empty.hidden = true
   await QRCode.toCanvas(qrCanvas, state.value || ' ', {
     width: 720,
     margin: 3,
@@ -110,14 +101,11 @@ async function renderQr() {
     errorCorrectionLevel: 'H'
   })
   drawIcon(qrCanvas)
-  document.querySelector('#format-label').textContent = 'QR CODE'
-  document.querySelector('#size-label').textContent = '720 × 720 px'
 }
 
 function renderBarcode() {
   qrCanvas.hidden = true
   barcodeSvg.hidden = false
-  empty.hidden = true
   JsBarcode(barcodeSvg, state.value || ' ', {
     format: 'CODE128',
     lineColor: state.foreground,
@@ -130,16 +118,11 @@ function renderBarcode() {
     margin: 34,
     textMargin: 12
   })
-  document.querySelector('#format-label').textContent = 'CODE 128'
-  document.querySelector('#size-label').textContent = '720 × 360 px'
 }
 
 async function render() {
-  count.textContent = state.value.length
-  status.textContent = '生成中'
   if (state.mode === 'qr') await renderQr()
   else renderBarcode()
-  status.textContent = '已更新'
 }
 
 async function downloadQr() {
@@ -201,12 +184,22 @@ document.querySelector('#icon-input').addEventListener('change', (event) => {
   if (!file) return
   state.iconName = file.name
   document.querySelector('#icon-name').textContent = file.name
+  clearIcon.disabled = false
   const image = new Image()
   image.onload = () => {
     state.icon = image
     render()
   }
   image.src = URL.createObjectURL(file)
+})
+
+clearIcon.addEventListener('click', () => {
+  state.icon = null
+  state.iconName = ''
+  document.querySelector('#icon-name').textContent = '未选择'
+  document.querySelector('#icon-input').value = ''
+  clearIcon.disabled = true
+  render()
 })
 
 document.querySelector('#download-button').addEventListener('click', downloadQr)
